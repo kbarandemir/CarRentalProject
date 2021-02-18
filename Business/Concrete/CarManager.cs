@@ -20,7 +20,6 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        [ValidationAspect(typeof(FulCarValidator))]
         public IResult Add(Car car)
         {
                 _carDal.Add(car);
