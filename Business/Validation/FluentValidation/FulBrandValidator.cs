@@ -11,10 +11,9 @@ namespace Business.Validation.FluentValidation
         public FulBrandValidator()
         {
             RuleFor(b => b.BrandId).Empty();
-            RuleFor(b => b.BrandName)
-                .Cascade(CascadeMode.Stop)
-                .NotEmpty().WithMessage("Please enter {Propertyname}")
-                .Length(2, 50).WithMessage("Please enter {Propertyname} between 2 and 50 characters");
+
+            RuleFor(b => b.BrandName).NotEmpty().WithMessage("Please enter {Propertyname}");
+            RuleFor(b => b.BrandName).Length(2, 50).WithMessage("Please enter {Propertyname} between 2 and 50 characters");
         }
     }
 }

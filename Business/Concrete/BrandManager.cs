@@ -2,7 +2,7 @@
 using Business.Abstract;
 using Business.Constant;
 using Business.Validation.FluentValidation;
-using Core.Utilities;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using FluentValidation.Results;

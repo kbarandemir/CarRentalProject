@@ -1,5 +1,5 @@
 ﻿using Business.Abstract;
-using Core.Utilities;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
@@ -7,31 +7,24 @@ using System.Collections.Generic;
 using Business.Constant;
 using Business.Validation.FluentValidation;
 using FluentValidation.Results;
+using FluentValidation;
+using Core.Aspects.Autofac.Validation;
 
 namespace Business.Concrete
 {
     public class CarManager : ICarService
     {
         ICarDal _carDal;
-        FulCarValidator _carValidator;
-        ValidationResult _validationResult;
         public CarManager(ICarDal carDal)
         {
-            _carValidator = new FulCarValidator();
             _carDal = carDal;
         }
+
+        [ValidationAspect(typeof(FulCarValidator))]
         public IResult Add(Car car)
         {
-            _validationResult = _carValidator.Validate(car);
-            if (!_validationResult.IsValid)
-            {
-                return new ErrorResult(_validationResult.Errors.ToString());
-            }
-            else
-            {
                 _carDal.Add(car);
                 return new SuccessResult(Messages.CarAdded);
-            }
         }
 
         public IResult Delete(Car car)
@@ -54,6 +47,19 @@ namespace Business.Concrete
             }
         }
 
+        public IDataResult<List<Car>> GetAll2()
+        {
+            var data = _carDal.GetAll();
+            if (data.Count > 0)
+            {
+                return new SuccessDataResult<List<Car>>(data, Messages.CarsListed);
+            }
+            else
+            {
+                return new ErrorDataResult<List<Car>>(Messages.NoCarToList);
+            }
+        }
+
         public IDataResult<List<CarDetailDto>> GetCarsByBrandName(string brandName)
         {
             var data = _carDal.GetCarDetailDto(c =>
@@ -68,15 +74,9 @@ namespace Business.Concrete
             }
         }
 
+        [ValidationAspect(typeof(FulCarValidator))]
         public IResult Update(Car car)
         {
-            _validationResult = _carValidator.Validate(car);
-            if (!_validationResult.IsValid)
-            {
-                return new ErrorResult(_validationResult.Errors.ToString());
-            }
-            else
-            {
                 Car carToUpdate = _carDal.Get(c => c.CarId == car.CarId);
                 carToUpdate.BrandId = car.BrandId;
                 carToUpdate.ModelId = car.ModelId;
@@ -87,7 +87,7 @@ namespace Business.Concrete
                 carToUpdate.ColorId = car.ColorId;
                 _carDal.Update(carToUpdate);
                 return new SuccessResult(Messages.CarUpdated);
-            }
+            
         }
     }
 }
