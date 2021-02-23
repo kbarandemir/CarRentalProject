@@ -49,13 +49,14 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.CarBodyNotFound);
             }
         }
+
         [ValidationAspect(typeof(FulCarBodyValidator))]
         public IResult Update(CarBody carBody)
         {
             var carBodyToUpdate = _carBodyDal.Get(c => c.CarBodyId == carBody.CarBodyId);
             carBodyToUpdate.CarBodyName = carBody.CarBodyName;
             _carBodyDal.Update(carBodyToUpdate);
-            return new SuccessResult();a
+            return new SuccessResult();
         }
     }
 }

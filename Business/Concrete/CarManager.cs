@@ -19,24 +19,32 @@ namespace Business.Concrete
         {
             _carDal = carDal;
         }
-         
+
         public IResult Add(Car car)
         {
-                _carDal.Add(car);
-                return new SuccessResult(Messages.CarAdded);
+            _carDal.Add(car);
+            return new SuccessResult(Messages.CarAdded);
         }
 
         public IResult Delete(Car car)
         {
             Car carToDelete = _carDal.Get(c => c.CarId == car.CarId);
-            _carDal.Delete(carToDelete);
-            return new SuccessResult(Messages.CarDeleted);
+            if (carToDelete.CarId > 0)
+            {
+                _carDal.Delete(carToDelete);
+                return new SuccessResult(Messages.CarDeleted);
+            }
+            else
+            {
+                return ErrorResult(Messages.CarNotFound);
+            }
+
         }
 
         public IDataResult<List<CarDetailDto>> GetAll()
         {
             var data = _carDal.GetCarDetailDto();
-            if (data.Count>0)
+            if (data.Count > 0)
             {
                 return new SuccessDataResult<List<CarDetailDto>>(data, Messages.CarsListed);
             }
@@ -63,7 +71,7 @@ namespace Business.Concrete
         {
             var data = _carDal.GetCarDetailDto(c =>
                 c.BrandName.ToUpper() == brandName.ToUpper());
-            if (data.Count>0)
+            if (data.Count > 0)
             {
                 return new SuccessDataResult<List<CarDetailDto>>(data, Messages.CarsListed);
             }
@@ -76,17 +84,17 @@ namespace Business.Concrete
         [ValidationAspect(typeof(FulCarValidator))]
         public IResult Update(Car car)
         {
-                Car carToUpdate = _carDal.Get(c => c.CarId == car.CarId);
-                carToUpdate.BrandId = car.BrandId;
-                carToUpdate.ModelId = car.ModelId;
-                carToUpdate.Transmission = car.Transmission;
-                carToUpdate.CarBodyId = car.CarBodyId;
-                carToUpdate.ModelYear = car.ModelYear;
-                carToUpdate.DailyPrice = car.DailyPrice;
-                carToUpdate.ColorId = car.ColorId;
-                _carDal.Update(carToUpdate);
-                return new SuccessResult(Messages.CarUpdated);
-            
+            Car carToUpdate = _carDal.Get(c => c.CarId == car.CarId);
+            carToUpdate.BrandId = car.BrandId;
+            carToUpdate.ModelId = car.ModelId;
+            carToUpdate.Transmission = car.Transmission;
+            carToUpdate.CarBodyId = car.CarBodyId;
+            carToUpdate.ModelYear = car.ModelYear;
+            carToUpdate.DailyPrice = car.DailyPrice;
+            carToUpdate.ColorId = car.ColorId;
+            _carDal.Update(carToUpdate);
+            return new SuccessResult(Messages.CarUpdated);
+
         }
     }
 }
