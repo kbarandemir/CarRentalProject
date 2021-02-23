@@ -2,6 +2,7 @@
 using Business.Abstract;
 using Business.Constant;
 using Business.Validation.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -12,11 +13,8 @@ namespace Business.Concrete
     public class BrandManager : IBrandService
     {
         IBrandDal _brandDal;
-        FulBrandValidator _brandValidator;
-        ValidationResult _validationResult;
         public BrandManager(IBrandDal brandDal)
         {
-            _brandValidator = new FulBrandValidator();
             _brandDal = brandDal;
         }
         public IDataResult<List<Brand>> GetAll()
@@ -32,19 +30,11 @@ namespace Business.Concrete
             }
             
         }
-
+        [ValidationAspect(typeof(FulBrandValidator))]
         public IResult Add(Brand brand)
         {
-            _validationResult = _brandValidator.Validate(brand);
-            if (!_validationResult.IsValid)
-            {
-                return new ErrorResult(_validationResult.Errors.ToString());
-            }
-            else
-            {
                 _brandDal.Add(brand);
                 return new SuccessResult(Messages.BrandAdded);
-            }
         }
 
         public IResult Delete(Brand brand)
@@ -53,21 +43,14 @@ namespace Business.Concrete
             _brandDal.Delete(brandToDelete);
             return new SuccessResult(Messages.BrandDeleted);
         }
-
+        [ValidationAspect(typeof(FulBrandValidator))]
         public IResult Update(Brand brand)
         {
-            _validationResult = _brandValidator.Validate(brand);
-            if (!_validationResult.IsValid)
-            {
-                return new ErrorResult(_validationResult.Errors.ToString());
-            }
-            else
-            {
                 Brand brandToUpdate = _brandDal.Get(b => b.BrandId == brand.BrandId);
                 brandToUpdate.BrandName = brand.BrandName;
                 _brandDal.Update(brandToUpdate);
                 return new SuccessResult(Messages.BrandUpdated);
-            }
+            
         }
     }
 }

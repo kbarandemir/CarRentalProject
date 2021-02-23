@@ -10,7 +10,16 @@ namespace Business.Validation.FluentValidation
     {
         public FulUserValidator()
         {
-                
+            RuleFor(u => u.DateOfBirth).Must(MustBeMoreThan18);
+        }
+
+        private bool MustBeMoreThan18(DateTime arg)
+        {
+            if ((DateTime.Now-arg).TotalDays >= 18*365)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

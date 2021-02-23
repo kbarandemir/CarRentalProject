@@ -10,7 +10,8 @@ namespace Business.Validation.FluentValidation
     {
         public FulCarBodyValidator()
         {
-                
+            RuleFor(cb => cb.CarBodyName).NotEmpty();
+            RuleFor(cb => cb.CarBodyName).Length(2, 20);
         }
     }
 }
