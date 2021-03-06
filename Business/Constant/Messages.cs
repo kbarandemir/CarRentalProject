@@ -63,5 +63,6 @@ namespace Business.Constant
         public static string ColorsListed = "Color are listed";
         public static string NoColorToList = "There is no Color to list";
         public static string ColorNotFound = "Color is not found";
+        public static string ImagesExceeded = "Car images exceeded.";
     }
 }

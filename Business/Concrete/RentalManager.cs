@@ -22,14 +22,11 @@ namespace Business.Concrete
         public IDataResult<List<Rental>> GetAll()
         {
             var result = _rentalDal.GetAll();
-            if (result.Count>0)
+            if (result.Count > 0)
             {
-                return new SuccessDataResult<List<Rental>>(result,Messages.RentalsListed);
+                return new SuccessDataResult<List<Rental>>(result, Messages.RentalsListed);
             }
-            else
-            {
-                return new ErrorDataResult<List<Rental>>(Messages.NoRentalToList);
-            }
+            return new ErrorDataResult<List<Rental>>(Messages.NoRentalToList);
         }
         [ValidationAspect(typeof(FulRentalValidator))]
         public IResult Add(Rental rental)
@@ -41,14 +38,11 @@ namespace Business.Concrete
         public IResult Delete(Rental rental)
         {
             var resultToDelete = _rentalDal.Get(r => r.RentalId == rental.RentalId);
-            if (resultToDelete.RentalId>0)
+            if (resultToDelete.RentalId > 0)
             {
                 return new SuccessResult(Messages.RentalDeleted);
             }
-            else
-            {
-                return new ErrorResult(Messages.RentalNotFound);
-            }
+            return new ErrorResult(Messages.RentalNotFound);
         }
         [ValidationAspect(typeof(FulRentalValidator))]
         public IResult Update(Rental rental)

@@ -20,7 +20,7 @@ namespace Business.Concrete
         }
         public IDataResult<List<Color>> GetAll()
         {
-            throw new NotImplementedException();
+            return new SuccessDataResult<List<Color>>(_colorDal.GetAll());
         }
         [ValidationAspect(typeof(FulColorValidator))]
         public IResult Add(Color color)
@@ -32,14 +32,12 @@ namespace Business.Concrete
         public IResult Delete(Color color)
         {
             var colorToDelete = _colorDal.Get(c => c.ColorId == color.ColorId);
-            if (colorToDelete.ColorId>0)
+            if (colorToDelete.ColorId > 0)
             {
                 return new SuccessResult(Messages.ColorDeleted);
             }
-            else
-            {
-                return new ErrorResult(Messages.ColorNotFound);
-            }
+            return new ErrorResult(Messages.ColorNotFound);
+
         }
         [ValidationAspect(typeof(FulColorValidator))]
         public IResult Update(Color color)

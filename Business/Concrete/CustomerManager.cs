@@ -27,10 +27,7 @@ namespace Business.Concrete
             {
                 return new SuccessDataResult<List<Customer>>(result, Messages.CustomersListed);
             }
-            else
-            {
-                return new ErrorDataResult<List<Customer>>(Messages.NoCustomerToList);
-            }
+            return new ErrorDataResult<List<Customer>>(Messages.NoCustomerToList);
         }
 
         [ValidationAspect(typeof(FulCustomerValidator))]
@@ -48,11 +45,7 @@ namespace Business.Concrete
                 _customerDal.Delete(customerToDelete);
                 return new SuccessResult(Messages.CustomerDeleted);
             }
-            else
-            {
-                return new ErrorResult(Messages.CustomerNotFound);
-            }
-
+            return new ErrorResult(Messages.CustomerNotFound);
         }
         [ValidationAspect(typeof(FulCustomerValidator))]
         public IResult Update(Customer customer)

@@ -34,11 +34,7 @@ namespace Business.Concrete
                 _carDal.Delete(carToDelete);
                 return new SuccessResult(Messages.CarDeleted);
             }
-            else
-            {
-                return ErrorResult(Messages.CarNotFound);
-            }
-
+            return new ErrorResult(Messages.CarNotFound);
         }
 
         public IDataResult<List<CarDetailDto>> GetAll()
@@ -48,10 +44,7 @@ namespace Business.Concrete
             {
                 return new SuccessDataResult<List<CarDetailDto>>(data, Messages.CarsListed);
             }
-            else
-            {
-                return new ErrorDataResult<List<CarDetailDto>>(Messages.NoCarToList);
-            }
+            return new ErrorDataResult<List<CarDetailDto>>(Messages.NoCarToList);
         }
 
         public IDataResult<List<Car>> GetAll2()
@@ -61,10 +54,18 @@ namespace Business.Concrete
             {
                 return new SuccessDataResult<List<Car>>(data, Messages.CarsListed);
             }
-            else
+            return new ErrorDataResult<List<Car>>(Messages.NoCarToList);
+
+        }
+
+        public IDataResult<Car> GetCarById(int carId)
+        {
+            var data = _carDal.Get(c => c.CarId == carId);
+            if (data!=null)
             {
-                return new ErrorDataResult<List<Car>>(Messages.NoCarToList);
+                return new SuccessDataResult<Car>(data);
             }
+            return new ErrorDataResult<Car>(Messages.CarNotFound);
         }
 
         public IDataResult<List<CarDetailDto>> GetCarsByBrandName(string brandName)
@@ -75,10 +76,8 @@ namespace Business.Concrete
             {
                 return new SuccessDataResult<List<CarDetailDto>>(data, Messages.CarsListed);
             }
-            else
-            {
-                return new ErrorDataResult<List<CarDetailDto>>(Messages.NoCarToList);
-            }
+            return new ErrorDataResult<List<CarDetailDto>>(Messages.NoCarToList);
+
         }
 
         [ValidationAspect(typeof(FulCarValidator))]
@@ -94,7 +93,6 @@ namespace Business.Concrete
             carToUpdate.ColorId = car.ColorId;
             _carDal.Update(carToUpdate);
             return new SuccessResult(Messages.CarUpdated);
-
         }
     }
 }

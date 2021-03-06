@@ -20,21 +20,19 @@ namespace Business.Concrete
         public IDataResult<List<Brand>> GetAll()
         {
             var data = _brandDal.GetAll();
-            if (data.Count>0)
+            if (data.Count > 0)
             {
-                return new SuccessDataResult<List<Brand>>(data,Messages.BrandsListed);
+                return new SuccessDataResult<List<Brand>>(data, Messages.BrandsListed);
             }
-            else
-            {
-                return new ErrorDataResult<List<Brand>>(Messages.NoBrandToList);
-            }
-            
+            return new ErrorDataResult<List<Brand>>(Messages.NoBrandToList);
+
+
         }
         [ValidationAspect(typeof(FulBrandValidator))]
         public IResult Add(Brand brand)
         {
-                _brandDal.Add(brand);
-                return new SuccessResult(Messages.BrandAdded);
+            _brandDal.Add(brand);
+            return new SuccessResult(Messages.BrandAdded);
         }
 
         public IResult Delete(Brand brand)
@@ -46,11 +44,11 @@ namespace Business.Concrete
         [ValidationAspect(typeof(FulBrandValidator))]
         public IResult Update(Brand brand)
         {
-                Brand brandToUpdate = _brandDal.Get(b => b.BrandId == brand.BrandId);
-                brandToUpdate.BrandName = brand.BrandName;
-                _brandDal.Update(brandToUpdate);
-                return new SuccessResult(Messages.BrandUpdated);
-            
+            Brand brandToUpdate = _brandDal.Get(b => b.BrandId == brand.BrandId);
+            brandToUpdate.BrandName = brand.BrandName;
+            _brandDal.Update(brandToUpdate);
+            return new SuccessResult(Messages.BrandUpdated);
+
         }
     }
 }

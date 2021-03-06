@@ -26,10 +26,7 @@ namespace Business.Concrete
             {
                 return new SuccessDataResult<List<User>>(result);
             }
-            else
-            {
-                return new ErrorDataResult<List<User>>();
-            }
+            return new ErrorDataResult<List<User>>();
         }
         [ValidationAspect(typeof(FulUserValidator))]
         public IResult Add(User user)
@@ -46,10 +43,7 @@ namespace Business.Concrete
                 _userDal.Delete(userToDelete);
                 return new SuccessResult(Messages.UserDeleted);
             }
-            else
-            {
-                return new ErrorResult(Messages.UserNotFound);
-            }
+            return new ErrorResult(Messages.UserNotFound);
         }
         [ValidationAspect(typeof(FulUserValidator))]
         public IResult Update(User user)
@@ -71,11 +65,7 @@ namespace Business.Concrete
             {
                 return new SuccessDataResult<User>(result);
             }
-            else
-            {
-                return new ErrorDataResult<User>(Messages.UserNotFound);
-            }
-
+            return new ErrorDataResult<User>(Messages.UserNotFound);
         }
     }
 }

@@ -21,14 +21,12 @@ namespace Business.Concrete
         public IDataResult<List<CarBody>> GetAll()
         {
             var result = _carBodyDal.GetAll();
-            if (result.Count>0)
+            if (result.Count > 0)
             {
                 return new SuccessDataResult<List<CarBody>>(result, Messages.CarBodiesListed);
             }
-            else
-            {
-                return new ErrorDataResult<List<CarBody>>(Messages.NoCarBodyToList);
-            }
+            return new ErrorDataResult<List<CarBody>>(Messages.NoCarBodyToList);
+
         }
         [ValidationAspect(typeof(FulCarBodyValidator))]
         public IResult Add(CarBody carBody)
@@ -40,14 +38,12 @@ namespace Business.Concrete
         public IResult Delete(CarBody carBody)
         {
             var carBodyToDelete = _carBodyDal.Get(c => c.CarBodyId == carBody.CarBodyId);
-            if (carBodyToDelete.CarBodyId>0)
+            if (carBodyToDelete.CarBodyId > 0)
             {
                 return new SuccessResult(Messages.CarBodyDeleted);
             }
-            else
-            {
-                return new ErrorResult(Messages.CarBodyNotFound);
-            }
+            return new ErrorResult(Messages.CarBodyNotFound);
+
         }
 
         [ValidationAspect(typeof(FulCarBodyValidator))]
