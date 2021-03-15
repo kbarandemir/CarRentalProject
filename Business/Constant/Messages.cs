@@ -2,7 +2,9 @@
 using Entities.DTOs;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
+using Core.Entities.Concrete;
 
 namespace Business.Constant
 {
@@ -56,7 +58,6 @@ namespace Business.Constant
         public static string CustomersListed = "Customer are listed";
         public static string NoCustomerToList = "There is no Customer to list";
         public static string CustomerNotFound = "Customer is not found";
-
         public static string ColorAdded = "Color added to the list.";
         public static string ColorDeleted = "Color deleted from the list.";
         public static string ColorUpdated = "Color updated.";
@@ -64,5 +65,12 @@ namespace Business.Constant
         public static string NoColorToList = "There is no Color to list";
         public static string ColorNotFound = "Color is not found";
         public static string ImagesExceeded = "Car images exceeded.";
+        public static string AuthorizationDenied = "You can not access";
+        public static string UserRegistered = "New User registered";
+        public static string PasswordError = "Password error";
+        public static string SuccessfulLogin = "You are in";
+        public static string UserAlreadyExists = "This user already existed. Please try again";
+        public static string AccessTokenCreated = "Token successfully created";
+        public static string UserFound = "User found";
     }
 }

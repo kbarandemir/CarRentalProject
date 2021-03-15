@@ -27,10 +27,10 @@ namespace WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpGet("getall2")]
+        [HttpGet("getalldetail")]
         public IActionResult GetAll2()
         {
-            var result = _carService.GetAll2();
+            var result = _carService.GetAllCarsDetail();
             if (result.Success)
             {
                 return Ok(result.Data);

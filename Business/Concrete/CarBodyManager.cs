@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constant;
 using Business.Validation.FluentValidation;
 using Core.Aspects.Autofac.Validation;
@@ -18,6 +19,7 @@ namespace Business.Concrete
         {
             _carBodyDal = carBodyDal;
         }
+        [SecuredOperation("admin,moderator,user")]
         public IDataResult<List<CarBody>> GetAll()
         {
             var result = _carBodyDal.GetAll();
@@ -28,13 +30,14 @@ namespace Business.Concrete
             return new ErrorDataResult<List<CarBody>>(Messages.NoCarBodyToList);
 
         }
+        [SecuredOperation("admin,moderator")]
         [ValidationAspect(typeof(FulCarBodyValidator))]
         public IResult Add(CarBody carBody)
         {
             _carBodyDal.Add(carBody);
             return new SuccessResult(Messages.CarBodyAdded);
         }
-
+        [SecuredOperation("admin,moderator")]
         public IResult Delete(CarBody carBody)
         {
             var carBodyToDelete = _carBodyDal.Get(c => c.CarBodyId == carBody.CarBodyId);
@@ -45,7 +48,7 @@ namespace Business.Concrete
             return new ErrorResult(Messages.CarBodyNotFound);
 
         }
-
+        [SecuredOperation("admin,moderator")]
         [ValidationAspect(typeof(FulCarBodyValidator))]
         public IResult Update(CarBody carBody)
         {

@@ -4,8 +4,10 @@ using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
 using System.Collections.Generic;
+using Business.BusinessAspects.Autofac;
 using Business.Constant;
 using Business.Validation.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using FluentValidation.Results;
 using FluentValidation;
 using Core.Aspects.Autofac.Validation;
@@ -20,12 +22,14 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
+        [SecuredOperation("car.add,admin,moderator")]
+        [ValidationAspect(typeof(FulCarValidator))]
         public IResult Add(Car car)
         {
             _carDal.Add(car);
             return new SuccessResult(Messages.CarAdded);
         }
-
+        [SecuredOperation("admin,moderator")]
         public IResult Delete(Car car)
         {
             Car carToDelete = _carDal.Get(c => c.CarId == car.CarId);
@@ -36,8 +40,9 @@ namespace Business.Concrete
             }
             return new ErrorResult(Messages.CarNotFound);
         }
-
-        public IDataResult<List<CarDetailDto>> GetAll()
+        [SecuredOperation("admin,moderator,user")]
+        [CacheAspect]
+        public IDataResult<List<CarDetailDto>> GetAllCarDetail()
         {
             var data = _carDal.GetCarDetailDto();
             if (data.Count > 0)
@@ -46,8 +51,8 @@ namespace Business.Concrete
             }
             return new ErrorDataResult<List<CarDetailDto>>(Messages.NoCarToList);
         }
-
-        public IDataResult<List<Car>> GetAll2()
+        [SecuredOperation("admin,moderator,user")]
+        public IDataResult<List<Car>> GetAll()
         {
             var data = _carDal.GetAll();
             if (data.Count > 0)
@@ -57,7 +62,8 @@ namespace Business.Concrete
             return new ErrorDataResult<List<Car>>(Messages.NoCarToList);
 
         }
-
+        [SecuredOperation("admin,moderator")]
+        [CacheAspect]
         public IDataResult<Car> GetCarById(int carId)
         {
             var data = _carDal.Get(c => c.CarId == carId);
@@ -67,7 +73,7 @@ namespace Business.Concrete
             }
             return new ErrorDataResult<Car>(Messages.CarNotFound);
         }
-
+        [SecuredOperation("admin,moderator,user")]
         public IDataResult<List<CarDetailDto>> GetCarsByBrandName(string brandName)
         {
             var data = _carDal.GetCarDetailDto(c =>
@@ -79,7 +85,7 @@ namespace Business.Concrete
             return new ErrorDataResult<List<CarDetailDto>>(Messages.NoCarToList);
 
         }
-
+        [SecuredOperation("admin,moderator")]
         [ValidationAspect(typeof(FulCarValidator))]
         public IResult Update(Car car)
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constant;
 using Business.Validation.FluentValidation;
 using Core.Aspects.Autofac.Validation;
@@ -19,6 +20,7 @@ namespace Business.Concrete
         {
             _rentalDal = rentalDal;
         }
+        [SecuredOperation("admin,moderator")]
         public IDataResult<List<Rental>> GetAll()
         {
             var result = _rentalDal.GetAll();
@@ -28,13 +30,14 @@ namespace Business.Concrete
             }
             return new ErrorDataResult<List<Rental>>(Messages.NoRentalToList);
         }
+        [SecuredOperation("admin,moderator")]
         [ValidationAspect(typeof(FulRentalValidator))]
         public IResult Add(Rental rental)
         {
             _rentalDal.Add(rental);
             return new SuccessResult(Messages.RentalAdded);
         }
-
+        [SecuredOperation("admin")]
         public IResult Delete(Rental rental)
         {
             var resultToDelete = _rentalDal.Get(r => r.RentalId == rental.RentalId);
@@ -44,6 +47,7 @@ namespace Business.Concrete
             }
             return new ErrorResult(Messages.RentalNotFound);
         }
+        [SecuredOperation("admin,moderator")]
         [ValidationAspect(typeof(FulRentalValidator))]
         public IResult Update(Rental rental)
         {

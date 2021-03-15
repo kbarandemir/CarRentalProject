@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constant;
 using Business.Validation.FluentValidation;
 using Core.Aspects.Autofac.Validation;
@@ -19,7 +20,7 @@ namespace Business.Concrete
         {
             _customerDal = customerDal;
         }
-
+        [SecuredOperation("admin,moderator")]   
         public IDataResult<List<Customer>> GetAll()
         {
             var result = _customerDal.GetAll();
@@ -29,14 +30,14 @@ namespace Business.Concrete
             }
             return new ErrorDataResult<List<Customer>>(Messages.NoCustomerToList);
         }
-
+        [SecuredOperation("admin,moderator")]
         [ValidationAspect(typeof(FulCustomerValidator))]
         public IResult Add(Customer customer)
         {
             _customerDal.Add(customer);
             return new SuccessResult(Messages.CustomerAdded);
         }
-
+        [SecuredOperation("admin")]
         public IResult Delete(Customer customer)
         {
             var customerToDelete = _customerDal.Get(c => c.CustomerId == customer.CustomerId);
@@ -47,6 +48,7 @@ namespace Business.Concrete
             }
             return new ErrorResult(Messages.CustomerNotFound);
         }
+        [SecuredOperation("admin,moderator")]
         [ValidationAspect(typeof(FulCustomerValidator))]
         public IResult Update(Customer customer)
         {

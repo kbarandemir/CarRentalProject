@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constant;
 using Business.Validation.FluentValidation;
 using Core.Aspects.Autofac.Validation;
@@ -19,13 +20,14 @@ namespace Business.Concrete
         {
             _modelDal = modelDal;
         }
+        [SecuredOperation("admin,moderator")]
         [ValidationAspect(typeof(FulModelValidator))]
         public IResult Add(Model model)
         {
             _modelDal.Add(model);
             return new SuccessResult(Messages.ModelAdded);
         }
-
+        [SecuredOperation("admin,moderator")]
         public IResult Delete(Model model)
         {
             var modelToDelete = _modelDal.Get(m => m.ModelId == model.ModelId);
@@ -35,7 +37,7 @@ namespace Business.Concrete
             }
             return new ErrorResult(Messages.ModelNotFound);
         }
-
+        [SecuredOperation("admin,moderator,user")]
         public IDataResult<List<Model>> GetAll()
         {
             var result = _modelDal.GetAll();
@@ -45,6 +47,7 @@ namespace Business.Concrete
             }
             return new ErrorDataResult<List<Model>>(Messages.NoModelToList);
         }
+        [SecuredOperation("admin,moderator")]
         [ValidationAspect(typeof(FulModelValidator))]
         public IResult Update(Model model)
         {
