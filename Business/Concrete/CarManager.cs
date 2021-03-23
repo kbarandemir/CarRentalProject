@@ -22,14 +22,14 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        [SecuredOperation("car.add,admin,moderator")]
+        //[SecuredOperation("car.add,admin,moderator")]
         [ValidationAspect(typeof(FulCarValidator))]
         public IResult Add(Car car)
         {
             _carDal.Add(car);
             return new SuccessResult(Messages.CarAdded);
         }
-        [SecuredOperation("admin,moderator")]
+        //[SecuredOperation("admin,moderator")]
         public IResult Delete(Car car)
         {
             Car carToDelete = _carDal.Get(c => c.CarId == car.CarId);
@@ -40,9 +40,9 @@ namespace Business.Concrete
             }
             return new ErrorResult(Messages.CarNotFound);
         }
-        [SecuredOperation("admin,moderator,user")]
+        //[SecuredOperation("admin,moderator,user")]
         [CacheAspect]
-        public IDataResult<List<CarDetailDto>> GetAllCarDetail()
+        public IDataResult<List<CarDetailDto>> GetAllCarsDetail()
         {
             var data = _carDal.GetCarDetailDto();
             if (data.Count > 0)
@@ -51,7 +51,7 @@ namespace Business.Concrete
             }
             return new ErrorDataResult<List<CarDetailDto>>(Messages.NoCarToList);
         }
-        [SecuredOperation("admin,moderator,user")]
+        //[SecuredOperation("admin,moderator,user")]
         public IDataResult<List<Car>> GetAll()
         {
             var data = _carDal.GetAll();
@@ -62,7 +62,7 @@ namespace Business.Concrete
             return new ErrorDataResult<List<Car>>(Messages.NoCarToList);
 
         }
-        [SecuredOperation("admin,moderator")]
+        //[SecuredOperation("admin,moderator")]
         [CacheAspect]
         public IDataResult<Car> GetCarById(int carId)
         {
@@ -73,7 +73,7 @@ namespace Business.Concrete
             }
             return new ErrorDataResult<Car>(Messages.CarNotFound);
         }
-        [SecuredOperation("admin,moderator,user")]
+        //[SecuredOperation("admin,moderator,user")]
         public IDataResult<List<CarDetailDto>> GetCarsByBrandName(string brandName)
         {
             var data = _carDal.GetCarDetailDto(c =>
@@ -85,7 +85,7 @@ namespace Business.Concrete
             return new ErrorDataResult<List<CarDetailDto>>(Messages.NoCarToList);
 
         }
-        [SecuredOperation("admin,moderator")]
+        //[SecuredOperation("admin,moderator")]
         [ValidationAspect(typeof(FulCarValidator))]
         public IResult Update(Car car)
         {

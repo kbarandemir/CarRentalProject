@@ -22,10 +22,10 @@ namespace Business.Concrete
 
         public IDataResult<List<OperationClaim>> GetClaims(User user)
         {
-            var result = _userDal.GetClaims((user));
+            var result = _userDal.GetClaims(user);
             if (result!=null)
             {
-                return new SuccessDataResult<List<OperationClaim>>(Messages.UsersListed);
+                return new SuccessDataResult<List<OperationClaim>>(result,Messages.UsersListed);
             }
 
             return new ErrorDataResult<List<OperationClaim>>(Messages.NoUserToList);
@@ -43,10 +43,10 @@ namespace Business.Concrete
             var result = _userDal.Get(u => u.Email == email);
             if (result!=null)
             {
-                return new SuccessDataResult<User>(Messages.UserFound);
+                return new SuccessDataResult<User>(result);
             }
 
-            return new ErrorDataResult<User>(Messages.UserNotFound);
+            return null;
         }
     }
 }
